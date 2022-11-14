@@ -1,0 +1,10 @@
+store_dev:
+  user: 'user2'
+  psw: 'pass2'
+  host: 'server2'
+  port: '0000'
+  database: 'store'
+  driver: '{ODBC Driver 18 for SQL Server}'
+auth:
+  table: 'authkeys'
+  database: 'store'
