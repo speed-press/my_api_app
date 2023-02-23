@@ -4,7 +4,7 @@ from flask import request, abort, g, current_app as app
 from .db import  get_db
 
 
-def get_apiauth_object_by_key(key):
+def get_apiauth_object_by_key(key: str):
     """
     A simplied method for verifying if an api_key provided by the 
     request exist in a security table. Definitely not production quality
@@ -16,12 +16,12 @@ def get_apiauth_object_by_key(key):
     with db.conn.cursor() as cur:
         cur.execute(sql, key)
         try:
-            db.conn.fetchone()[0]
+            cur.fetchone()[0]
             return True
         except: 
             return False
 
-def authorized(key):
+def authorized(key: str):
     """
     Checks for the existence of an api_key before proceeding.
     """

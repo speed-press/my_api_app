@@ -6,6 +6,7 @@ import pyodbc
 import json
 import re
 import logging 
+from typing import Union, Any
 
 from werkzeug.datastructures import ImmutableDict as iDict
 from flask import g, current_app as app
@@ -14,7 +15,7 @@ from myapp.format_utils import converter
 from definitions import DB_CONFIG, ENVIRONMENT
 from myapp.utils import readConfig
 
-logger = logging.getLogger('query')
+logger = logging.getLogger('queries')
 
 
 class DbConnect():
@@ -26,7 +27,7 @@ class DbConnect():
 
     def buildConnString(self):
         """ 
-        Build a connection string from the config file
+        Build a connection string from the config.ini file.
         """
         config = self.config
         section = self.section
@@ -45,6 +46,7 @@ class DbConnect():
         dbString =  (
             'Driver=%s;Server=%s;Port=%s;UID=%s;PWD=%s'
             % (driver, host, port, user, passwd))
+
         return dbString
 
     def connect(self):
@@ -52,7 +54,7 @@ class DbConnect():
         conn = pyodbc.connect(self.buildConnString())
         self.conn = conn
 
-    def _formatQueryString(self, query, format_args = None):
+    def _formatQueryString(self, query: str, format_args: Union[str, list, dict[str, Any]] = None):
         """
         Formats the query string
         """
@@ -86,7 +88,7 @@ class DbConnect():
         else:
             return result
  
-    def _trimQueryString(self, string, trim_carriage=True):
+    def _trimQueryString(self, string: str, trim_carriage=True):
         """
         Trims query string carriage returns for better logging in 
         case you have it imported using a formatter. You can also add 
@@ -109,7 +111,7 @@ class DbConnect():
             data = cur.execute(query)
         return data
   
-    def queryJson(self, query):
+    def queryJson(self, query: str):
         """
         Queries the database with a json query string (JSON_OBJECT)
         """
